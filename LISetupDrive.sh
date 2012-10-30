@@ -1,5 +1,24 @@
 #!/bin/sh
 
+#Check for Google Icon Drive Helper
+if [ ! -d "/Library/PrivilegedHelperTools" ]; then
+	mkdir -p "/Library/PrivilegedHelperTools"
+	chown root:wheel "/Library/PrivilegedHelperTools"
+	chmod 1755 "/Library/PrivilegedHelperTools"
+fi
+
+if [ ! -e "/Library/PrivilegedHelperTools/Google Drive Icon Helper" ]; then
+	if [ -d "/Applications/Google Drive.app" ]; then
+		cp "Applications/Google Drive.app/Contents/Resources/Google Drive Icon Helper" "/Library/PrivilegedHelperTools/"
+		chown root:procmod "/Library/PrivilegedHelperTools/Google Drive Icon Helper"
+		chmod 6755 "/Library/PrivilegedHelperTools/Google Drive Icon Helper"
+	else
+		echo "Google Drive application not installed"
+		exit 1;
+	fi
+fi
+
+#Set up redirections to /Users/Shared/USERNAME
 eval home_loc=~$1
 eval localGDprefs="/Users/Shared/$1/Application\ Support/Google/Drive"
 
@@ -20,4 +39,3 @@ fi
 
 chown -R $1 "/Users/Shared/$1"
 chmod 700 "/Users/Shared/$1"
-
